@@ -1,0 +1,4 @@
+#!/bin/sh
+
+javac SafeMartin/**/*.java
+appletviewer safemartin.html
