@@ -1,15 +1,22 @@
-package SafeMartin.road;
+package safeMartin.road;
 
+import safeMartin.display.RoadCanvas;
 import java.awt.*;
 import java.applet.*;
-import static java.awt.GridBagConstraints.*;;
+import static java.awt.GridBagConstraints.*;
 
 public class Road extends Applet {
 
     Button martinHouse, martinPath, martinRoad, enemyEnter, enemyExit;
+    public enum Entity {Martin, Enemy}
+    public enum MartinLocation {InHouse, OnPath, OnRoad}
+    private boolean gateOpen, lightOn;
+    
 
     @Override
     public void init() {
+        gateOpen = true;
+        lightOn = false;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -30,7 +37,6 @@ public class Road extends Applet {
         ++gbc.gridx;
         add(martinPath = new Button("Enter road"),gbc);
         ++gbc.gridx;
-        gbc.fill = REMAINDER;
         add(martinRoad = new Button("Leave road"),gbc);
 
         gbc.weightx = 0;
@@ -44,29 +50,27 @@ public class Road extends Applet {
         add(environment,gbc);
     }
 
-    class RoadCanvas extends Canvas {
-        final int width, height;
+    class Martin implements Runnable {
+        RoadCanvas display;
+        Road control;
 
-        public RoadCanvas (int width, int height) {
-            setBackground (Color.green);
-            this.width = width; this.height = height;
-            setSize(width, height);
+        public Martin(RoadCanvas display){
+            this.display = display;
+
+
         }
 
-        public void paint (Graphics g) {
-            Graphics2D g2;
-            g2 = (Graphics2D) g;
+        @Override
+        public void run() {
+            try {
+                while(true) {
+                    
+                }
 
-            int padding = 10, width_=width/8, height_= width/16, size = padding+height_;
-            g2.setColor(Color.red);
-            g2.fillPolygon(new int[]{width/2 - width_, width/2, width/2 + width_}, 
-                    new int[]{padding + height_, padding, padding + height_}, 3);
-            size += padding;
-
-            height_ = width_;
-            g2.fillRect(width/2 - width_/2, size, height_, width_);
-            size += height_;
+            } catch (InterruptedException e) {}
         }
-   }
+
+    
+    }
 
 }
