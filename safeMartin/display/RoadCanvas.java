@@ -8,18 +8,17 @@ import java.applet.*;
 public class RoadCanvas extends Canvas {
     final int width, height;
 
-    private Rectangle gate, light;
-    private boolean gateOpen = true, lightOn = false;
-    private MartinLocation ml;
-    private int road;
+    private Color lightColor;
+    private boolean gateOpen;
 
 
     public RoadCanvas (int width, int height) {
         setBackground (Color.green);
         this.width = width; this.height = height;
-        ml = MartinLocation.InHouse;
-        road = 0;
-        setSize(width, height);
+        setSize(width, height-(int)height/3);
+
+        gateOpen = true;
+        lightColor = Color.white;
     }
 
     public void paint (Graphics g) {
@@ -41,11 +40,11 @@ public class RoadCanvas extends Canvas {
         g2.setColor(Color.gray);
         width_ = width_/2;
         g2.fillRect(width/2 - width_/2, size, width_, height_);
-        size += height_;
 
         //light
-	if (lightOn)
-	g.setColor(Color.yellow);
+        g2.setColor(lightColor);
+        g2.fillRect(width/2 - width_, size + size/4, width_/2, width_/2);
+        size += height_;
 
         //road
         g2.setColor(Color.lightGray);
@@ -53,65 +52,36 @@ public class RoadCanvas extends Canvas {
         g2.fillRect(width/2 - width_/2, size, width_, width_/4);
 
         //gate
+        height_ = width_/4;
+        System.err.println(height_);
         g2.setColor(Color.black);
-        if (gateOpen) {
-        
-        } else {
-
-        }
+        int begin;
+        if (gateOpen)
+            begin = size-height_;
+        else 
+            begin = size;
+        g2.fillRect(width/2 - width_/2, begin, width_/32, height_);
 
     }
 
-    public void openGate(boolean open) throws RuntimeException {
-        if (open && gateOpen || (!gateOpen && !open))
-            throw new RuntimeException("Gate already open/closed");
-        gateOpen = open;
+    public void openGate() {
+        gateOpen = true;
         repaint();
     }
 
-    public void lightSwitch(boolean turnOn) throws RuntimeException {
-        if (lightOn && turnOn || (!lightOn && !turnOn))
-            throw new RuntimeException("Light already on/off");
-            
-        lightOn = turnOn;
+    public void closeGate() {
+        gateOpen = false;
         repaint();
     }
 
-    public void leaveHouse() throws RuntimeException {
-        if (ml != MartinLocation.InHouse)
-            throw new RuntimeException("Martin is not in his house");
-
-
-
+    public void lightOn() {
+        lightColor = Color.red;
+        repaint();
     }
 
-    public void enterRoad(Entity e) throws RuntimeException {
-        switch(e) {
-            case Martin:
-                if (ml != MartinLocation.OnPath)
-                    throw new RuntimeException("Martin is not on the road");
-                break;
-            case Enemy:
-                ++road;
-                break;
-        }
+    public void lightOff() {
+        lightColor = Color.white;
+        repaint();
     }
-
-    public void leaveRoad(Entity e) throws RuntimeException {
-        switch(e) {
-            case Martin:
-                if (ml != MartinLocation.OnRoad)
-                    throw new RuntimeException("Martin is not on the road");
-                break;
-            case Enemy:
-                if (road <= 0)
-                    throw new RuntimeException("There are no enemies on the road");
-                break;
-        }
-    }
-
 
 }
-
-
-

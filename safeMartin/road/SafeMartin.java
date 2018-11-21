@@ -11,12 +11,13 @@ public class SafeMartin extends Applet {
     public enum Entity {Martin, Enemy}
     public enum MartinLocation {InHouse, OnPath, OnRoad}
     private boolean gateOpen, lightOn;
-    
+    private RoadCanvas road;
 
     @Override
     public void init() {
         gateOpen = true;
         lightOn = false;
+        road = new RoadCanvas(getWidth(), getHeight());
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -44,10 +45,33 @@ public class SafeMartin extends Applet {
         gbc.gridwidth = 6;
         gbc.gridy = 0;
         gbc.gridx = 0;
-        Canvas rd = new RoadCanvas(getWidth(), getHeight());
         Panel environment = new Panel();
-        environment.add(rd);
+        environment.add(road);
         add(environment,gbc);
+    }
+
+    public void openGate(boolean open) throws RuntimeException {
+        if (open && gateOpen || (!open && !gateOpen))
+            throw new RuntimeException("gate cannot move");
+
+        gateOpen = open;
+        if (open)
+            road.openGate();
+        else
+            road.closeGate();
+
+    }
+
+    public void switchLight(boolean on) throws RuntimeException {
+        if (lightOn && on || (!lightOn && !on))
+            throw new RuntimeException("light cannot turn on");
+
+        lightOn = on;
+        if (on) 
+            road.lightOn();
+        else 
+            road.lightOff();
+        
     }
 
     class Martin implements Runnable {
