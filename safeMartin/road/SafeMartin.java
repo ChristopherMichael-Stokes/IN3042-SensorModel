@@ -5,7 +5,7 @@ import java.awt.*;
 import java.applet.*;
 import static java.awt.GridBagConstraints.*;
 
-public class Road extends Applet {
+public class SafeMartin extends Applet {
 
     Button martinHouse, martinPath, martinRoad, enemyEnter, enemyExit;
     public enum Entity {Martin, Enemy}
@@ -52,7 +52,6 @@ public class Road extends Applet {
 
     class Martin implements Runnable {
         RoadCanvas display;
-        Road control;
 
         public Martin(RoadCanvas display){
             this.display = display;
@@ -62,12 +61,7 @@ public class Road extends Applet {
 
         @Override
         public void run() {
-            try {
-                while(true) {
-                    
-                }
 
-            } catch (InterruptedException e) {}
         }
 
     

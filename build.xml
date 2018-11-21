@@ -1,0 +1,40 @@
+<project default="compile">
+	<presetdef name="javac">
+		<javac includeantruntime="false"/>
+	</presetdef>
+	<condition property="windowsos">
+		<os family="windows"/>
+	</condition>
+	<condition property="linuxos">
+		<os family="unix"/>
+	</condition>
+
+	<target name="compile">
+		<javac srcdir="./" destdir="./" source="1.8" target="1.8"/>
+	</target>
+
+	<target name="winrun">
+		<exec executable="cmd">
+			<arg value="/c"/>
+			<arg value="appletviewer"/>
+			<arg value="safemartin.html"/>
+		</exec>
+	</target>
+
+	<target name="linuxrun">
+		<exec executable="/bin/sh">
+			<arg value="-c"/>
+			<arg value="appletviewer"/>
+			<arg value="safemartin.html"/>
+		</exec>
+	</target>
+
+
+	<target name="run" depends="compile, winrun, linuxrun">
+		<exec executable="cmd">
+			<arg value="/c"/>
+			<arg value="appletviewer"/>
+			<arg value="safemartin.html"/>
+		</exec>
+	</target>
+</project>
