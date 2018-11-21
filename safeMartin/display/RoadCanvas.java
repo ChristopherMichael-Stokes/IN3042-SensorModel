@@ -44,11 +44,8 @@ public class RoadCanvas extends Canvas {
         size += height_;
 
         //light
-        if (lightOn) {
-
-        } else { 
-
-        }
+	if (lightOn)
+	g.setColor(Color.yellow);
 
         //road
         g2.setColor(Color.lightGray);
