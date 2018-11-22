@@ -14,10 +14,9 @@
 	</target>
 
 	<target name="winrun" if="windowsos">
-		<exec executable="cmd" os="windows">
+		<exec executable="cmd">
 			<arg value="/c"/>
-			<arg value="appletviewer"/>
-			<arg value="safemartin.html"/>
+			<arg value="appletviewer safemartin.html"/>
 		</exec>
 	</target>
 

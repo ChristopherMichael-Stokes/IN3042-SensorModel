@@ -1,12 +1,14 @@
 package safeMartin.road;
 
 import safeMartin.display.RoadCanvas;
+import safeMartin.control.*;
 import java.awt.*;
 import java.applet.*;
 import static java.awt.GridBagConstraints.*;
 
-public class SafeMartin extends Applet {
+public class Road extends Applet {
 
+    Checkbox safe;
     Button martinHouse, martinPath, martinRoad, enemyEnter, enemyExit;
     public enum Entity {Martin, Enemy}
     public enum MartinLocation {InHouse, OnPath, OnRoad}
@@ -76,19 +78,37 @@ public class SafeMartin extends Applet {
 
     class Martin implements Runnable {
         RoadCanvas display;
+        SafeMartin control;
 
         public Martin(RoadCanvas display){
             this.display = display;
-
-
         }
 
         @Override
         public void run() {
+            while (true) {
+                try {
+                    wait(); 
 
+                } catch (InterruptedException e) {}
+
+            } 
         }
 
-    
+     
+    }
+
+    class Enemy implements Runnable {
+        RoadCanvas display; UnsafeMartin control;
+
+        public Enemy(RoadCanvas display, Gate gate, UnsafeMartin control){
+            this.display = display; this.control = control;
+        }
+
+        @Override
+        public void run() {}
+
+
     }
 
 }
