@@ -5,9 +5,11 @@ import java.applet.*;
 
 
 public class RoadCanvas extends Canvas {
-    public enum Entity {Martin, Enemy}
+    public static final int MARTIN = 0, ENEMY = 1;
     public enum MartinLocation {InHouse, OnPath, OnRoad}
 
+    private int roadCount;
+    private MartinLocation ml;
     private Color lightColor;
     private boolean gateOpen;
 
@@ -18,6 +20,8 @@ public class RoadCanvas extends Canvas {
         this.width = width; this.height = height;
         setSize(width, height-(int)height/3);
 
+        roadCount = 0;
+        ml = MartinLocation.InHouse;
         gateOpen = true;
         lightColor = Color.white;
     }
@@ -61,8 +65,6 @@ public class RoadCanvas extends Canvas {
         else 
             begin = size;
         g2.fillRect(width/2 - width_/2, begin, width_/32, height_);
-        System.err.println("...");
-
     }
 
     public void openGate() {
@@ -84,5 +86,21 @@ public class RoadCanvas extends Canvas {
         lightColor = Color.white;
         repaint();
     }
+
+    private boolean canEnter = true;
+    public boolean canEnter() {return canEnter;}
+
+    public synchronized void roadEnter() {
+        --roadCount;
+    }
+    public synchronized void roadExit() throws InterruptedException {
+        canEnter = false;
+        ++roadCount;
+        Thread.sleep(500);
+        canEnter = true;
+    }
+    public void martinRoadEnter() { ml = MartinLocation.OnRoad; repaint(); }
+    public void martinRoadExit() { ml = MartinLocation.InHouse; repaint(); }
+    public void houseExit(){ ml = MartinLocation.OnPath; repaint(); }
 
 }

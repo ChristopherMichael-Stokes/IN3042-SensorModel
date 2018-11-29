@@ -13,6 +13,7 @@ public class Road extends Applet {
     //Button martinHouse, martinPath, martinRoad, enemyEnter, enemyExit;
     private boolean gateOpen, lightOn;
     private RoadCanvas road;
+    public static final int ENEMIES = 4;
 
     @Override
     public void init() {
@@ -57,11 +58,18 @@ public class Road extends Applet {
 
         //SafeMartin safeController = new SafeMartin(road);
         UnsafeMartin unsafeController = new UnsafeMartin(road);
-        UnsafeMartin controller = unsafeController;
 
 
-        Enemy e = new Enemy(road, controller);
-        e.start();
+        Thread m = new Thread(new Martin(road, unsafeController));
+        Thread e1 = new Thread(new Enemy(road, unsafeController));
+        Thread e[] = new Thread[ENEMIES];
+        for (int i = 0; i < ENEMIES; ++i) {
+            e[i] = new Thread(new Enemy(road, unsafeController));
+            e[i].start();
+        }
+        e1.start();
+        m.start();
+
 
 
         //add code to take information from one controller then swap
@@ -74,7 +82,7 @@ public class Road extends Applet {
     }
 
 
-    class Martin extends Thread {
+    class Martin implements Runnable {
         RoadCanvas display; UnsafeMartin control;
 
         public Martin(RoadCanvas display, UnsafeMartin control){
@@ -82,16 +90,22 @@ public class Road extends Applet {
         }
 
         @Override
-        public void start() {
+        public void run() {
             while (true) {
                 try {
-                    this.sleep(1000);
+                    System.err.println("Martin in house");
+                    Thread.sleep(1500);
                     control.exit(sensor1);
-                    this.sleep(200);
+                    display.houseExit();
+                    System.err.println("Martin on path");
+                    Thread.sleep(200);
                     while (control.lightOn());
                     control.enter(sensor2);
-                    this.sleep(500);
+                    display.martinRoadEnter();
+                    System.err.println("Martin on road");
+                    Thread.sleep(500);
                     control.exit(sensor4);
+                    display.martinRoadExit();
                 } catch (InterruptedException e) {}
 
             } 
@@ -100,7 +114,7 @@ public class Road extends Applet {
      
     }
 
-    class Enemy extends Thread {
+    class Enemy implements Runnable {
         RoadCanvas display; UnsafeMartin control;
 
         public Enemy(RoadCanvas display, UnsafeMartin control){
@@ -108,16 +122,20 @@ public class Road extends Applet {
         }
 
         @Override
-        public void start() {
+        public void run() {
             while (true) {
                 try {
-                    this.sleep(500);
                     control.gate.pass();
+                    while (!display.canEnter());
                     control.enter(sensor3); 
+                    display.roadEnter();
+                    Thread.sleep(500);
                     System.err.println("enter road");
-                    this.sleep(500);
                     control.exit(sensor4);
+                    display.roadExit();
+                    Thread.sleep(500);
                     System.err.println("exit road");
+
                 } catch (InterruptedException e) {}
             }
         }

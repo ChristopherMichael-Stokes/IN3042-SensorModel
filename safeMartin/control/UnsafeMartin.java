@@ -21,6 +21,7 @@ public class UnsafeMartin {
         martinOnRoad = false;
     }
 
+    //move sensors to seperate methods
     public synchronized void enter(Sensors s) {
         switch(s) {
             case sensor2:
@@ -28,7 +29,7 @@ public class UnsafeMartin {
             case sensor3:
                 if (roadCount == 0) {
                     lightState = true;
-                    //display.lightOn();
+                    display.lightOn();
                 }
 
                 ++roadCount;
@@ -49,7 +50,7 @@ public class UnsafeMartin {
                         martinOnRoad = false;
                     }
                     lightState = false;
-                    //display.lightOff();
+                    display.lightOff();
                 }
 
                 --roadCount;
