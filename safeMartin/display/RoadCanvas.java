@@ -1,16 +1,17 @@
 package safeMartin.display;
 
-import static safeMartin.road.SafeMartin.*;
 import java.awt.*;
 import java.applet.*;
 
 
 public class RoadCanvas extends Canvas {
-    final int width, height;
+    public enum Entity {Martin, Enemy}
+    public enum MartinLocation {InHouse, OnPath, OnRoad}
 
     private Color lightColor;
     private boolean gateOpen;
 
+    final int width, height;
 
     public RoadCanvas (int width, int height) {
         setBackground (Color.green);
@@ -53,7 +54,6 @@ public class RoadCanvas extends Canvas {
 
         //gate
         height_ = width_/4;
-        System.err.println(height_);
         g2.setColor(Color.black);
         int begin;
         if (gateOpen)
@@ -61,6 +61,7 @@ public class RoadCanvas extends Canvas {
         else 
             begin = size;
         g2.fillRect(width/2 - width_/2, begin, width_/32, height_);
+        System.err.println("...");
 
     }
 
